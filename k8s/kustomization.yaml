@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aceest-fitness
+
+resources:
+  - 00-namespace.yaml
+  - 01-rolling-update.yaml
+  - 02-blue-green.yaml
+  - 03-canary.yaml
+  - 04-ab-testing.yaml
+  - 05-shadow-deployment.yaml

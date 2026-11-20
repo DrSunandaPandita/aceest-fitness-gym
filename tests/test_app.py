@@ -308,3 +308,25 @@ def test_bmi_calculator_non_numeric(client):
     res = client.post('/api/calculator/bmi', json={"weight_kg": "abc", "height_cm": "xyz"})
     assert res.status_code == 400
     assert res.get_json()['success'] is False
+
+
+def test_api_version_endpoint(client):
+    """Verify the /api/version metadata endpoint for deployment strategy validation."""
+    res = client.get('/api/version')
+    assert res.status_code == 200
+    data = res.get_json()
+    assert data['success'] is True
+    assert 'version' in data
+    assert 'environment' in data
+    assert 'release_color' in data
+    assert 'pod_hostname' in data
+
+
+def test_healthcheck_version_metadata(client):
+    """Verify healthcheck includes release and version metadata."""
+    res = client.get('/health')
+    assert res.status_code == 200
+    data = res.get_json()
+    assert data['status'] == 'healthy'
+    assert 'version' in data
+    assert 'release_color' in data

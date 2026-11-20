@@ -1,0 +1,84 @@
+# =====================================================================
+# Strategy 1: Rolling Update Deployment (Zero Downtime)
+# Ensures seamless transitions from v1.0.0 to v2.0.0 with zero dropped requests
+# =====================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-rolling-app
+  namespace: aceest-fitness
+  labels:
+    app: aceest-rolling
+    tier: web
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1        # Allow 1 extra pod during rollout (4 pods max)
+      maxUnavailable: 0  # Zero downtime guarantee: keep all 3 available
+  selector:
+    matchLabels:
+      app: aceest-rolling
+  template:
+    metadata:
+      labels:
+        app: aceest-rolling
+        tier: web
+    spec:
+      containers:
+        - name: web
+          image: drsunandapandita/aceest-fitness:v1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: APP_VERSION
+              value: "1.0.0"
+            - name: APP_ENV
+              value: "production"
+            - name: RELEASE_COLOR
+              value: "blue"
+            - name: PORT
+              value: "5000"
+          ports:
+            - containerPort: 5000
+              name: http
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-rolling-service
+  namespace: aceest-fitness
+  labels:
+    app: aceest-rolling
+spec:
+  type: NodePort
+  selector:
+    app: aceest-rolling
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+      nodePort: 30080

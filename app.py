@@ -12,6 +12,11 @@ from flask import Flask, jsonify, render_template, request
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 
+# Version and Deployment Environment Configuration
+APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
+APP_ENV = os.getenv("APP_ENV", "production")
+RELEASE_COLOR = os.getenv("RELEASE_COLOR", "blue")
+
 # Thread-safe in-memory data store
 _lock = Lock()
 
@@ -136,6 +141,16 @@ def reset_state():
         next_member_id = 4
 
 
+@app.context_processor
+def inject_global_metadata():
+    """Inject application version and deployment metadata into all templates."""
+    return {
+        "app_version": APP_VERSION,
+        "app_env": APP_ENV,
+        "release_color": RELEASE_COLOR
+    }
+
+
 # -------------------------------------------------------------
 # Template Routes (shadcn grey/zinc UI)
 # -------------------------------------------------------------
@@ -174,7 +189,24 @@ def healthcheck():
     return jsonify({
         "status": "healthy",
         "service": "aceest-fitness-gym",
-        "version": "1.0.0",
+        "version": APP_VERSION,
+        "environment": APP_ENV,
+        "release_color": RELEASE_COLOR,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }), 200
+
+
+@app.route('/api/version', methods=['GET'])
+def get_version():
+    """Version metadata endpoint for validating deployment strategies."""
+    import socket
+    return jsonify({
+        "success": True,
+        "service": "aceest-fitness-gym",
+        "version": APP_VERSION,
+        "environment": APP_ENV,
+        "release_color": RELEASE_COLOR,
+        "pod_hostname": socket.gethostname(),
         "timestamp": datetime.now(timezone.utc).isoformat()
     }), 200
 

@@ -7,5 +7,8 @@ exclude =
     venv,
     env,
     build,
-    dist
+    dist,
+    code_versions,
+    ACEest_Fitness.py,
+    generate_assignment2_pdf.py
 ignore = E203, W503

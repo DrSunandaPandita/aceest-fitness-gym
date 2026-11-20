@@ -30,10 +30,13 @@
       </nav>
 
       <div class="nav-actions">
+        <span class="badge" style="background: {% if release_color == 'green' %}#15803d{% elif release_color == 'blue' %}#1d4ed8{% else %}#3f3f46{% endif %}; color: #ffffff; font-weight: 600;" title="Release Version & Cluster Pod Status">
+          v{{ app_version }} • {{ release_color|upper }}
+        </span>
         <a href="/health" target="_blank" class="badge badge-success" style="cursor: pointer;" title="API Healthcheck">
-          ● System Healthy
+          ● Healthy
         </a>
-        <a href="https://github.com" target="_blank" class="btn btn-secondary btn-sm">
+        <a href="https://github.com/DrSunandaPandita/aceest-fitness-gym" target="_blank" class="btn btn-secondary btn-sm">
           GitHub Repo
         </a>
       </div>
@@ -46,7 +49,7 @@
 
   <footer>
     <div class="container">
-      <p>© 2026 ACEest Fitness & Gym — DevOps Engineering Assignment 1. Automated via GitHub Actions, Pytest, Docker & Jenkins.</p>
+      <p>© 2026 ACEest Fitness & Gym — DevOps Engineering Assignment 2. Automated via GitHub Actions, Pytest, SonarQube, Docker, Jenkins & Kubernetes.</p>
     </div>
   </footer>
 

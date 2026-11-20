@@ -1,0 +1,170 @@
+# =====================================================================
+# Strategy 4: A/B Testing (Header & Cookie Routing)
+# Directs specific user cohorts (e.g. VIP athletes / Beta testers)
+# to Variant B while general public remains on Variant A.
+# =====================================================================
+
+# 1. Variant A (Baseline / Control Cohort - v1.0.0)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-ab-control
+  namespace: aceest-fitness
+  labels:
+    app: aceest-ab-app
+    variant: control
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aceest-ab-app
+      variant: control
+  template:
+    metadata:
+      labels:
+        app: aceest-ab-app
+        variant: control
+    spec:
+      containers:
+        - name: web
+          image: drsunandapandita/aceest-fitness:v1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: APP_VERSION
+              value: "1.0.0-control"
+            - name: APP_ENV
+              value: "ab-control"
+            - name: RELEASE_COLOR
+              value: "blue"
+            - name: PORT
+              value: "5000"
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-ab-control-service
+  namespace: aceest-fitness
+  labels:
+    app: aceest-ab-app
+    variant: control
+spec:
+  type: ClusterIP
+  selector:
+    app: aceest-ab-app
+    variant: control
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+---
+# 2. Variant B (Experimental / Treatment Cohort - v2.0.0)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-ab-experiment
+  namespace: aceest-fitness
+  labels:
+    app: aceest-ab-app
+    variant: experiment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aceest-ab-app
+      variant: experiment
+  template:
+    metadata:
+      labels:
+        app: aceest-ab-app
+        variant: experiment
+    spec:
+      containers:
+        - name: web
+          image: drsunandapandita/aceest-fitness:v2.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: APP_VERSION
+              value: "2.0.0-experiment"
+            - name: APP_ENV
+              value: "ab-experiment"
+            - name: RELEASE_COLOR
+              value: "purple"
+            - name: PORT
+              value: "5000"
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aceest-ab-experiment-service
+  namespace: aceest-fitness
+  labels:
+    app: aceest-ab-app
+    variant: experiment
+spec:
+  type: ClusterIP
+  selector:
+    app: aceest-ab-app
+    variant: experiment
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+---
+# 3. Base Ingress (Routes default traffic to Variant A Control)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aceest-ab-base-ingress
+  namespace: aceest-fitness
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: aceest-ab-control-service
+                port:
+                  number: 5000
+---
+# 4. A/B Testing Canary Ingress (Routes traffic with Header: 'X-Beta-Tester: true' to Variant B)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aceest-ab-experiment-ingress
+  namespace: aceest-fitness
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-by-header: "X-Beta-Tester"
+    nginx.ingress.kubernetes.io/canary-by-header-value: "true"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: aceest-ab-experiment-service
+                port:
+                  number: 5000

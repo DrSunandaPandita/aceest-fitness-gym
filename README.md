@@ -1,26 +1,27 @@
-# ACEest Fitness & Gym — Automated CI/CD Pipeline
+# ACEest Fitness & Gym — Automated CI/CD & Kubernetes Continuous Delivery
 
 [![CI/CD Pipeline](https://github.com/DrSunandaPandita/aceest-fitness-gym/actions/workflows/main.yml/badge.svg)](https://github.com/DrSunandaPandita/aceest-fitness-gym/actions)
 [![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.14-blue.svg)](https://www.python.org/)
-[![Docker](https://img.shields.io/badge/docker-containerized-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)
-[![Pytest](https://img.shields.io/badge/tests-24%20passed-brightgreen.svg?logo=pytest)](https://docs.pytest.org/)
+[![Docker](https://img.shields.io/badge/docker-drsunandapandita%2Faceest--fitness-2496ED.svg?logo=docker&logoColor=white)](https://hub.docker.com/r/drsunandapandita/aceest-fitness)
+[![Kubernetes](https://img.shields.io/badge/kubernetes-5%20strategies-326CE5.svg?logo=kubernetes&logoColor=white)](https://kubernetes.io/)
+[![Pytest](https://img.shields.io/badge/tests-26%20passed-brightgreen.svg?logo=pytest)](https://docs.pytest.org/)
 [![Coverage](https://img.shields.io/badge/coverage-94%25-success.svg)](https://coverage.readthedocs.io/)
-[![UI Style](https://img.shields.io/badge/UI-shadcn%20grey%20zinc-18181b.svg)](https://ui.shadcn.com)
+[![SonarQube](https://img.shields.io/badge/SonarQube-Quality%20Gate%20Passed-4C9A2A.svg?logo=sonarqube&logoColor=white)](https://sonarqube.org/)
 
 ---
 
 ## 📌 Executive Overview
 
-**ACEest Fitness & Gym** is a rapidly scaling startup delivering tailored fitness management, athletic scheduling, and metabolic assessment services. 
+**ACEest Fitness & Gym** is a dynamic athletic startup delivering tailored workout regimens, class scheduling, and metabolic health tracking.
 
-This repository contains the complete solution for **Assignment 1: Implementing Automated CI/CD Pipelines for ACEest Fitness & Gym** (Introduction to DevOps, BITS Pilani). It delivers an automated, enterprise-grade deployment lifecycle transitioning the application through:
-1. **Modular Web Architecture** (Flask 3.x, Gunicorn, REST API, shadcn grey/zinc responsive UI)
-2. **Version Control & Quality Control Standards** (Git, Branching workflows, Flake8 linting)
-3. **Automated Unit Testing & Validation Framework** (Pytest with 24 test cases, 94%+ coverage)
-4. **Security-Hardened Containerization** (Multi-layer Docker image with non-root security principles and health checks)
-5. **Quality Gate Pipeline via Jenkins** (Declarative `Jenkinsfile` for isolated build & deployment validation)
-6. **Continuous Integration via GitHub Actions** (`.github/workflows/main.yml` with in-container validation)
-7. **Zero-Touch VM Provisioning** (Single-command bash script `setup_vm.sh` configuring an entire Linux cloud VM)
+This repository contains the complete solution for **Assignment 2: DevOps CI/CD Implementation & Advanced Kubernetes Deployment for ACEest Fitness & Gym** (Introduction to DevOps CSIZG514/SEZG514, BITS Pilani). It delivers an enterprise-grade automated delivery lifecycle featuring:
+1. **Multi-Version Application Lifecycle**: Tracks evolutionary milestones (`v1.0.0`, `v2.0.0`, `v3.0.0`) mapped from course prototypes (`code_versions/`).
+2. **Automated Unit Testing & Quality Assurance**: 26 Pytest unit tests achieving 94%+ statement coverage with JUnit XML test artifacts.
+3. **Static Analysis & Quality Gate Enforcement**: SonarQube scanning (`sonar-project.properties`) integrated into Jenkins gating builds.
+4. **Central Container Registry**: Multi-tag Docker Hub images (`drsunandapandita/aceest-fitness:v1.0.0`, `v2.0.0`, `v3.0.0`, `latest`).
+5. **Continuous Integration via Jenkins**: Declarative pipeline (`Jenkinsfile`) with SCM polling (`H/5 * * * *`), in-container verification, and automated rollback.
+6. **5 Progressive Kubernetes Deployment Strategies**: Declarative manifests (`k8s/`) implementing **Rolling Update, Blue-Green, Canary (80/20), A/B Testing, and Shadow Deployment (Dark Launching)**.
+7. **Automated Self-Healing Rollback**: Rollout failure detection restoring healthy revisions with zero downtime.
 
 ---
 
@@ -29,15 +30,56 @@ This repository contains the complete solution for **Assignment 1: Implementing 
 ```mermaid
 flowchart TD
     subgraph Developer_Environment [Developer Workstation]
-        Dev[Local Workstation] -->|git commit & push| GitHub[GitHub Remote Repository]
+        Dev[Local Workstation] -->|git commit & push tags| GitHub[GitHub Remote Repository]
     end
 
-    subgraph GitHub_Actions [GitHub Actions Automated CI]
-        GitHub -->|push / pull_request| GA_Lint[Stage 1A: Flake8 Linting & Syntax Check]
-        GA_Lint --> GA_Test[Stage 1B: Pytest Suite & Coverage Report]
-        GA_Test --> GA_Docker[Stage 2A: Docker Image Assembly]
-        GA_Docker --> GA_InContainer[Stage 2B: In-Container Pytest Verification]
-        GA_InContainer --> GA_Health[Stage 2C: Container Health Probe Check]
+    subgraph Jenkins_CI [Jenkins CI / CD Quality Gate]
+        GitHub -->|SCM Polling H/5| JK_Checkout[Stage 1: Checkout SCM]
+        JK_Checkout --> JK_Lint[Stage 2: Setup & Flake8 Lint]
+        JK_Lint --> JK_Pytest[Stage 3: Pytest & JUnit Report Generation]
+        JK_Pytest --> JK_Sonar[Stage 4: SonarQube Static Analysis]
+        JK_Sonar --> JK_QG{Stage 5: Quality Gate Passed?}
+        JK_QG -->|No| JK_Abort[Abort Pipeline]
+        JK_QG -->|Yes| JK_DockerBuild[Stage 6: Multi-Version Docker Assembly]
+        JK_DockerBuild --> JK_ContainerTest[Stage 7: In-Container Pytest Verification]
+        JK_ContainerTest --> JK_Push[Stage 8: Push Images to Docker Hub]
+        JK_Push --> JK_Deploy[Stage 9: Deploy to Kubernetes Cluster]
+    end
+
+    subgraph Kubernetes_Cluster [Kubernetes Orchestration - aceest-fitness]
+        JK_Deploy --> S1[1. Rolling Update (maxSurge=1, maxUnavailable=0)]
+        JK_Deploy --> S2[2. Blue-Green Cutover (atomic service patch)]
+        JK_Deploy --> S3[3. Canary Release (80% stable / 20% canary)]
+        JK_Deploy --> S4[4. A/B Testing (Header X-Beta-Tester)]
+        JK_Deploy --> S5[5. Shadow Deployment (Traffic Mirroring)]
+        JK_Deploy -.->|Health Check Fail| Rollback[Automated Rollback Engine]
+    end
+```
+
+---
+
+## ☸️ 5 Kubernetes Deployment Strategies (`k8s/`)
+
+| Strategy | Manifest | Mechanism & Validation |
+| :--- | :--- | :--- |
+| **1. Rolling Update** | `k8s/01-rolling-update.yaml` | `maxSurge: 1`, `maxUnavailable: 0`. Pods are updated incrementally one-by-one with zero downtime. |
+| **2. Blue-Green** | `k8s/02-blue-green.yaml` | `aceest-blue` (v1) and `aceest-green` (v2) run concurrently. Traffic switches instantly by patching `selector.version: green`. |
+| **3. Canary Release** | `k8s/03-canary.yaml` | 80/20 traffic split (4 pods v1 + 1 pod v2) sharing a unified Service, plus Ingress canary annotations. |
+| **4. A/B Testing** | `k8s/04-ab-testing.yaml` | Ingress header routing: requests with `X-Beta-Tester: true` route to Variant B; all others route to Variant A. |
+| **5. Shadow Deployment** | `k8s/05-shadow-deployment.yaml` | Ingress mirrors live production requests asynchronously to candidate pods (`mirror-target`) without impacting real users. |
+
+### Run Automated Cluster Verification:
+```bash
+chmod +x k8s/06-verify-and-rollback.sh
+./k8s/06-verify-and-rollback.sh
+```
+
+---
+
+## 📜 Academic Deliverable Documents
+- **Assignment 2 Full Technical Report**: [`SUBMISSION_REPORT_ASSIGNMENT_2.md`](SUBMISSION_REPORT_ASSIGNMENT_2.md)
+- **Publication-Ready PDF**: [`Dr_Sunanda_Pandita_DevOps_Assignment2_Report.pdf`](Dr_Sunanda_Pandita_DevOps_Assignment2_Report.pdf)
+- **Assignment 1 Archive**: [`SUBMISSION_REPORT.md`](SUBMISSION_REPORT.md)
     end
 
     subgraph Jenkins_CI [Jenkins CI / CD Quality Gate]
