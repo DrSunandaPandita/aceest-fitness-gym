@@ -96,28 +96,18 @@ HTML_CONTENT = """<!DOCTYPE html>
     font-size: 8.5pt;
   }
   th, td {
-    padding: 5px 8px;
-    border: 1px solid #e2e8f0;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
     text-align: left;
   }
   th {
     background: #f1f5f9;
     font-weight: 700;
-    color: #334155;
+    color: #1e293b;
   }
   tr:nth-child(even) td {
     background: #f8fafc;
   }
-  .badge {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 7.5pt;
-    font-weight: 700;
-  }
-  .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-  .badge-blue { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
-  .badge-purple { background: #f3e8ff; color: #7e22ce; border: 1px solid #d8b4fe; }
   .code-block {
     background: #0f172a;
     color: #f8fafc;
@@ -173,42 +163,42 @@ This report documents the design, automated implementation, and verification of 
     <tr>
       <td><strong>Application &amp; Versions</strong></td>
       <td>Modular Flask web app (<code>app.py</code>) mapping 10 course prototype versions across semantic releases.</td>
-      <td><span class="badge badge-success">✓ Verified &amp; Archived</span></td>
+      <td>Verified &amp; Archived</td>
     </tr>
     <tr>
       <td><strong>Version Control (Git)</strong></td>
       <td>Git repository linked to GitHub; semantic release tags (<code>v1.0.0</code>, <code>v2.0.0</code>, <code>v3.0.0</code>).</td>
-      <td><span class="badge badge-success">✓ Semantic Tags Applied</span></td>
+      <td>Applied (v1.0.0, v2.0.0, v3.0.0)</td>
     </tr>
     <tr>
       <td><strong>Automated Testing</strong></td>
       <td>Pytest suite with 26 automated unit/integration tests; 94%+ statement coverage; JUnit reports.</td>
-      <td><span class="badge badge-success">✓ 26/26 Tests Passed</span></td>
+      <td>Passed (26/26 tests, 94% coverage)</td>
     </tr>
     <tr>
       <td><strong>CI Automation (Jenkins)</strong></td>
       <td>Declarative <code>Jenkinsfile</code> with SCM polling (<code>H/5 * * * *</code>) and 9 automated build stages.</td>
-      <td><span class="badge badge-success">✓ Pipeline Validated</span></td>
+      <td>Configured &amp; Validated</td>
     </tr>
     <tr>
       <td><strong>Code Quality &amp; Quality Gate</strong></td>
       <td>SonarQube integration (<code>sonar-project.properties</code>) enforcing strict quality gates.</td>
-      <td><span class="badge badge-success">✓ Quality Gate Passed</span></td>
+      <td>Quality Gate Passed</td>
     </tr>
     <tr>
       <td><strong>Container Registry</strong></td>
       <td>Multi-stage <code>Dockerfile</code> pushing versioned tags to Docker Hub (<code>drsunandapandita/aceest-fitness</code>).</td>
-      <td><span class="badge badge-success">✓ Docker Hub Tagged</span></td>
+      <td>Tagged &amp; Published</td>
     </tr>
     <tr>
       <td><strong>Kubernetes Deployments</strong></td>
       <td>5 Advanced Strategies: Rolling Update, Blue-Green, Canary 80/20, A/B Testing, Shadow Mirroring.</td>
-      <td><span class="badge badge-success">✓ 5 Strategies Active</span></td>
+      <td>Implemented &amp; Active</td>
     </tr>
     <tr>
       <td><strong>Resilience &amp; Rollback</strong></td>
       <td>Automated failure detection and self-healing rollback via <code>kubectl rollout undo</code>.</td>
-      <td><span class="badge badge-success">✓ Self-Healing Proven</span></td>
+      <td>Validated (Self-Healing Rollout)</td>
     </tr>
   </tbody>
 </table>

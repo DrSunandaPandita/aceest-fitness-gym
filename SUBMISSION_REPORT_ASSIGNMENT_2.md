@@ -16,16 +16,16 @@ This project delivers the end-to-end automated Continuous Integration and Contin
 ### Deliverables Checklist
 
 | Requirement | Implementation Artifact | Verification Status |
-| :--- | :--- | :---: |
-| **Public GitHub Repository** | [`DrSunandaPandita/aceest-fitness-gym`](https://github.com/DrSunandaPandita/aceest-fitness-gym) | ✅ Verified Public |
-| **Application Source & Versions** | [`app.py`](app.py), [`code_versions/`](code_versions/) (10 legacy versions), [`ACEest_Fitness.py`](ACEest_Fitness.py) | ✅ Verified & Versioned |
-| **Version Control System** | Semantic Git tags (`v1.0.0`, `v2.0.0`, `v3.0.0`) and structured commits | ✅ Semantic Tags Applied |
-| **Unit Testing & Test Automation** | [`tests/test_app.py`](tests/test_app.py) (26 automated Pytest test cases, 94%+ coverage) | ✅ 26/26 Passed |
-| **Continuous Integration (Jenkins)** | [`Jenkinsfile`](Jenkinsfile) declarative pipeline with 9 automated stages and SCM polling | ✅ Automated Execution |
-| **Code Quality & Quality Gate** | [`sonar-project.properties`](sonar-project.properties) + SonarQube scanner integration | ✅ Quality Gate Passed |
-| **Containerization & Registry** | Multi-layer, non-root [`Dockerfile`](Dockerfile) + [`scripts/build_and_push_versions.sh`](scripts/build_and_push_versions.sh) | ✅ Multi-Tag Docker Hub |
-| **Kubernetes Orchestration** | [`k8s/`](k8s/) manifests implementing all 5 deployment methodologies | ✅ 5 Strategies Verified |
-| **Zero-Downtime Rollback** | Automated rollback trigger in Jenkins + [`k8s/06-verify-and-rollback.sh`](k8s/06-verify-and-rollback.sh) | ✅ Self-Healing Validated |
+| :--- | :--- | :--- |
+| **Public GitHub Repository** | [`DrSunandaPandita/aceest-fitness-gym`](https://github.com/DrSunandaPandita/aceest-fitness-gym) | Verified |
+| **Application Source & Versions** | [`app.py`](app.py), [`code_versions/`](code_versions/) (10 legacy versions), [`ACEest_Fitness.py`](ACEest_Fitness.py) | Verified & Versioned |
+| **Version Control System** | Semantic Git tags (`v1.0.0`, `v2.0.0`, `v3.0.0`) and structured commits | Applied (v1.0.0, v2.0.0, v3.0.0) |
+| **Unit Testing & Test Automation** | [`tests/test_app.py`](tests/test_app.py) (26 automated Pytest test cases, 94%+ coverage) | Passed (26/26 tests, 94% coverage) |
+| **Continuous Integration (Jenkins)** | [`Jenkinsfile`](Jenkinsfile) declarative pipeline with 9 automated stages and SCM polling | Configured & Validated |
+| **Code Quality & Quality Gate** | [`sonar-project.properties`](sonar-project.properties) + SonarQube scanner integration | Passed |
+| **Containerization & Registry** | Multi-layer, non-root [`Dockerfile`](Dockerfile) + [`scripts/build_and_push_versions.sh`](scripts/build_and_push_versions.sh) | Tagged & Published |
+| **Kubernetes Orchestration** | [`k8s/`](k8s/) manifests implementing all 5 deployment methodologies | Implemented (5 Strategies) |
+| **Zero-Downtime Rollback** | Automated rollback trigger in Jenkins + [`k8s/06-verify-and-rollback.sh`](k8s/06-verify-and-rollback.sh) | Validated (Self-Healing Rollout) |
 
 ---
 
@@ -152,7 +152,7 @@ To satisfy the zero-downtime and automated recovery mandate:
 ## 8. Conclusion & Final Status
 
 The automated DevOps CI/CD pipeline for **ACEest Fitness & Gym** satisfies every criteria defined in Assignment 2:
-- ✅ Full multi-version code tracking in Git and Docker Hub.
-- ✅ Automated testing (Pytest) and static quality analysis (SonarQube) gating Jenkins builds.
-- ✅ End-to-end containerized continuous delivery across 5 Kubernetes deployment strategies.
-- ✅ Robust, self-healing automated rollbacks ensuring continuous system availability.
+- Full multi-version code tracking in Git and Docker Hub.
+- Automated testing (Pytest) and static quality analysis (SonarQube) gating Jenkins builds.
+- End-to-end containerized continuous delivery across 5 Kubernetes deployment strategies.
+- Robust, self-healing automated rollbacks ensuring continuous system availability.
