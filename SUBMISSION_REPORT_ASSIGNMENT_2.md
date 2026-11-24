@@ -33,37 +33,37 @@ This project delivers the end-to-end automated Continuous Integration and Contin
 
 ```mermaid
 flowchart TD
-    subgraph Developer_Workstation [Developer Environment]
-        Dev[Local Workstation] -->|git commit & push tags| GitHub[GitHub Remote Repository]
+    subgraph Developer_Workstation ["Developer Environment"]
+        Dev["Local Workstation"] -->|git commit & push tags| GitHub["GitHub Remote Repository"]
     end
 
-    subgraph Jenkins_CI_Pipeline [Jenkins Continuous Integration Server]
-        GitHub -->|SCM Polling H/5| JK_Checkout[Stage 1: Checkout SCM]
-        JK_Checkout --> JK_Lint[Stage 2: Setup & Flake8 Linting]
-        JK_Lint --> JK_Pytest[Stage 3: Automated Pytest Suite]
-        JK_Pytest --> JK_Sonar[Stage 4: SonarQube Static Analysis]
-        JK_Sonar --> JK_QG{Stage 5: Quality Gate Passed?}
-        JK_QG -->|No| JK_Fail[Abort Pipeline & Alert]
-        JK_QG -->|Yes| JK_Build[Stage 6: Multi-Version Docker Assembly]
-        JK_Build --> JK_InContainerTest[Stage 7: In-Container Pytest Verification]
-        JK_InContainerTest --> JK_RegistryPush[Stage 8: Push Images to Docker Hub]
+    subgraph Jenkins_CI_Pipeline ["Jenkins Continuous Integration Server"]
+        GitHub -->|SCM Polling H/5| JK_Checkout["Stage 1: Checkout SCM"]
+        JK_Checkout --> JK_Lint["Stage 2: Setup & Flake8 Linting"]
+        JK_Lint --> JK_Pytest["Stage 3: Automated Pytest Suite"]
+        JK_Pytest --> JK_Sonar["Stage 4: SonarQube Static Analysis"]
+        JK_Sonar --> JK_QG{"Stage 5: Quality Gate Passed?"}
+        JK_QG -->|No| JK_Fail["Abort Pipeline & Alert"]
+        JK_QG -->|Yes| JK_Build["Stage 6: Multi-Version Docker Assembly"]
+        JK_Build --> JK_InContainerTest["Stage 7: In-Container Pytest Verification"]
+        JK_InContainerTest --> JK_RegistryPush["Stage 8: Push Images to Docker Hub"]
     end
 
-    subgraph Container_Registry [Central Registry]
-        JK_RegistryPush --> DockerHub[Docker Hub Repository: drsunandapandita/aceest-fitness<br/>Tags: v1.0.0, v2.0.0, v3.0.0, latest]
+    subgraph Container_Registry ["Central Registry"]
+        JK_RegistryPush --> DockerHub["Docker Hub Repository: drsunandapandita/aceest-fitness<br/>Tags: v1.0.0, v2.0.0, v3.0.0, latest"]
     end
 
-    subgraph Kubernetes_CD [Kubernetes Continuous Delivery & Orchestration]
-        DockerHub --> KubeDeploy[Stage 9: Kubernetes Rollout Deployment]
-        KubeDeploy --> S1[Strategy 1: Zero-Downtime Rolling Update]
-        KubeDeploy --> S2[Strategy 2: Blue-Green Deployment]
-        KubeDeploy --> S3[Strategy 3: 80/20 Canary Release]
-        KubeDeploy --> S4[Strategy 4: A/B Testing Header Routing]
-        KubeDeploy --> S5[Strategy 5: Shadow Dark Launch Mirroring]
+    subgraph Kubernetes_CD ["Kubernetes Continuous Delivery & Orchestration"]
+        DockerHub --> KubeDeploy["Stage 9: Kubernetes Rollout Deployment"]
+        KubeDeploy --> S1["Strategy 1: Zero-Downtime Rolling Update"]
+        KubeDeploy --> S2["Strategy 2: Blue-Green Deployment"]
+        KubeDeploy --> S3["Strategy 3: 80/20 Canary Release"]
+        KubeDeploy --> S4["Strategy 4: A/B Testing Header Routing"]
+        KubeDeploy --> S5["Strategy 5: Shadow Dark Launch Mirroring"]
     end
 
-    subgraph Resilience_Engine [Fault Tolerance & Resilience]
-        KubeDeploy -.->|Health Probe Failure| Rollback[Automated Rollback Engine<br/>kubectl rollout undo]
+    subgraph Resilience_Engine ["Fault Tolerance & Resilience"]
+        KubeDeploy -.->|Health Probe Failure| Rollback["Automated Rollback Engine<br/>kubectl rollout undo"]
     end
 ```
 

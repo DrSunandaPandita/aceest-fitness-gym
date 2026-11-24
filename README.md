@@ -29,30 +29,30 @@ This repository contains the complete solution for **Assignment 2: DevOps CI/CD 
 
 ```mermaid
 flowchart TD
-    subgraph Developer_Environment [Developer Workstation]
-        Dev[Local Workstation] -->|git commit & push tags| GitHub[GitHub Remote Repository]
+    subgraph Developer_Environment ["Developer Workstation"]
+        Dev["Local Workstation"] -->|git commit & push tags| GitHub["GitHub Remote Repository"]
     end
 
-    subgraph Jenkins_CI [Jenkins CI / CD Quality Gate]
-        GitHub -->|SCM Polling H/5| JK_Checkout[Stage 1: Checkout SCM]
-        JK_Checkout --> JK_Lint[Stage 2: Setup & Flake8 Lint]
-        JK_Lint --> JK_Pytest[Stage 3: Pytest & JUnit Report Generation]
-        JK_Pytest --> JK_Sonar[Stage 4: SonarQube Static Analysis]
-        JK_Sonar --> JK_QG{Stage 5: Quality Gate Passed?}
-        JK_QG -->|No| JK_Abort[Abort Pipeline]
-        JK_QG -->|Yes| JK_DockerBuild[Stage 6: Multi-Version Docker Assembly]
-        JK_DockerBuild --> JK_ContainerTest[Stage 7: In-Container Pytest Verification]
-        JK_ContainerTest --> JK_Push[Stage 8: Push Images to Docker Hub]
-        JK_Push --> JK_Deploy[Stage 9: Deploy to Kubernetes Cluster]
+    subgraph Jenkins_CI ["Jenkins CI / CD Quality Gate"]
+        GitHub -->|SCM Polling H/5| JK_Checkout["Stage 1: Checkout SCM"]
+        JK_Checkout --> JK_Lint["Stage 2: Setup & Flake8 Lint"]
+        JK_Lint --> JK_Pytest["Stage 3: Pytest & JUnit Report Generation"]
+        JK_Pytest --> JK_Sonar["Stage 4: SonarQube Static Analysis"]
+        JK_Sonar --> JK_QG{"Stage 5: Quality Gate Passed?"}
+        JK_QG -->|No| JK_Abort["Abort Pipeline"]
+        JK_QG -->|Yes| JK_DockerBuild["Stage 6: Multi-Version Docker Assembly"]
+        JK_DockerBuild --> JK_ContainerTest["Stage 7: In-Container Pytest Verification"]
+        JK_ContainerTest --> JK_Push["Stage 8: Push Images to Docker Hub"]
+        JK_Push --> JK_Deploy["Stage 9: Deploy to Kubernetes Cluster"]
     end
 
-    subgraph Kubernetes_Cluster [Kubernetes Orchestration - aceest-fitness]
-        JK_Deploy --> S1[1. Rolling Update (maxSurge=1, maxUnavailable=0)]
-        JK_Deploy --> S2[2. Blue-Green Cutover (atomic service patch)]
-        JK_Deploy --> S3[3. Canary Release (80% stable / 20% canary)]
-        JK_Deploy --> S4[4. A/B Testing (Header X-Beta-Tester)]
-        JK_Deploy --> S5[5. Shadow Deployment (Traffic Mirroring)]
-        JK_Deploy -.->|Health Check Fail| Rollback[Automated Rollback Engine]
+    subgraph Kubernetes_Cluster ["Kubernetes Orchestration - aceest-fitness"]
+        JK_Deploy --> S1["1. Rolling Update (maxSurge=1, maxUnavailable=0)"]
+        JK_Deploy --> S2["2. Blue-Green Cutover (atomic service patch)"]
+        JK_Deploy --> S3["3. Canary Release (80% stable / 20% canary)"]
+        JK_Deploy --> S4["4. A/B Testing (Header X-Beta-Tester)"]
+        JK_Deploy --> S5["5. Shadow Deployment (Traffic Mirroring)"]
+        JK_Deploy -.->|Health Check Fail| Rollback["Automated Rollback Engine"]
     end
 ```
 
