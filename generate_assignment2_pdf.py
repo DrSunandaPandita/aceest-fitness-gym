@@ -54,13 +54,13 @@ HTML_CONTENT = """<!DOCTYPE html>
   }
   .meta-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr 1fr;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
     padding: 8px 12px;
     margin-bottom: 14px;
-    gap: 8px;
+    gap: 8px 16px;
     font-size: 8.5pt;
   }
   .meta-item strong {
@@ -69,6 +69,11 @@ HTML_CONTENT = """<!DOCTYPE html>
     font-size: 7.5pt;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    margin-bottom: 2px;
+  }
+  a {
+    color: #0284c7;
+    text-decoration: underline;
   }
   h2 {
     font-size: 11pt;
@@ -140,10 +145,10 @@ HTML_CONTENT = """<!DOCTYPE html>
 </div>
 
 <div class="meta-grid">
-  <div class="meta-item"><strong>Institution / Course</strong>BITS Pilani (CSIZG514/SEZG514)</div>
-  <div class="meta-item"><strong>Student / Author</strong>DrSunandaPandita</div>
-  <div class="meta-item"><strong>BITS Student ID</strong>2025tm93132@wilp.bits-pilani.ac.in</div>
-  <div class="meta-item"><strong>Public GitHub</strong>github.com/DrSunandaPandita/aceest-fitness-gym</div>
+  <div class="meta-item"><strong>Institution &amp; Course</strong>BITS Pilani &bull; Introduction to DevOps (CSIZG514/SEZG514)</div>
+  <div class="meta-item"><strong>Student / Author</strong>DrSunandaPandita (2025tm93132@wilp.bits-pilani.ac.in)</div>
+  <div class="meta-item"><strong>Public GitHub Repository</strong><a href="https://github.com/DrSunandaPandita/aceest-fitness-gym" target="_blank">https://github.com/DrSunandaPandita/aceest-fitness-gym</a></div>
+  <div class="meta-item"><strong>Container Registry (Docker Hub)</strong><a href="https://hub.docker.com/r/drsunandapandita/aceest-fitness" target="_blank">https://hub.docker.com/r/drsunandapandita/aceest-fitness</a></div>
 </div>
 
 <h2>1. Executive Summary &amp; Deliverables Matrix</h2>
@@ -166,8 +171,8 @@ This report documents the design, automated implementation, and verification of 
       <td>Verified &amp; Archived</td>
     </tr>
     <tr>
-      <td><strong>Version Control (Git)</strong></td>
-      <td>Git repository linked to GitHub; semantic release tags (<code>v1.0.0</code>, <code>v2.0.0</code>, <code>v3.0.0</code>).</td>
+      <td><strong>Public Repository &amp; VCS</strong></td>
+      <td><a href="https://github.com/DrSunandaPandita/aceest-fitness-gym" target="_blank">https://github.com/DrSunandaPandita/aceest-fitness-gym</a><br>Semantic release tags: <code>v1.0.0</code>, <code>v2.0.0</code>, <code>v3.0.0</code></td>
       <td>Applied (v1.0.0, v2.0.0, v3.0.0)</td>
     </tr>
     <tr>
@@ -187,7 +192,7 @@ This report documents the design, automated implementation, and verification of 
     </tr>
     <tr>
       <td><strong>Container Registry</strong></td>
-      <td>Multi-stage <code>Dockerfile</code> pushing versioned tags to Docker Hub (<code>drsunandapandita/aceest-fitness</code>).</td>
+      <td>Docker Hub: <a href="https://hub.docker.com/r/drsunandapandita/aceest-fitness" target="_blank">https://hub.docker.com/r/drsunandapandita/aceest-fitness</a></td>
       <td>Tagged &amp; Published</td>
     </tr>
     <tr>
